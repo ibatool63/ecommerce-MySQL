@@ -11,7 +11,7 @@ router.get("/", function (req, res) {
 
 router.get('/shop', isLoggedIn, async (req, res) => {
     try {
-        const product = await productModel.find(); // Replace ProductModel with your actual model
+        const product = await productModel.findAll(); // Replace ProductModel with your actual model
         let success = req.flash("success");
         res.render("shop", { products: product, success });
     } catch (error) {

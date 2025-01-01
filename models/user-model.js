@@ -1,25 +1,40 @@
-const mongoose = require('mongoose');
+const { DataTypes } = require("sequelize");
+const sequelize = require("../config/mysql-connection");
 
-const userSchema = mongoose.Schema({
+const User = sequelize.define("User", {
     fullname: {
-        type: String,
-        minLength: 3,
-        trim: true,
+        type: DataTypes.STRING,
+        allowNull: false,
     },
-    email: String,
-    password: String,
-    cart: [
-        {
-        type: mongoose.Schema.Types.ObjectId,
-        ref: "product",
-        },
-    ],
+    email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        unique: true,
+    },
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    cart: {
+        type: DataTypes.JSON, // Using JSON to store product references or cart details
+        defaultValue: [],
+    },
     orders: {
-        type: Array,
-        default: [],
+        type: DataTypes.JSON, // Using JSON for order details
+        defaultValue: [],
     },
-    picture: String,
-    contact: Number,
+    picture: {
+        type: DataTypes.STRING,
+    },
+    contact: {
+        type: DataTypes.BIGINT, // Use BIGINT for phone numbers
+        allowNull: true,
+    },
+}, {
+    tableName: 'users', // Table name in the database
+    timestamps: false,   // Automatically adds createdAt and updatedAt columns
 });
 
-module.exports = mongoose.model("user", userSchema);
+
+
+module.exports = User;
