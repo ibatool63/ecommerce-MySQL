@@ -1,19 +1,42 @@
-const mongoose = require('mongoose');
+const { Sequelize, DataTypes } = require('sequelize');
+const sequelize = require("../config/mysql-connection"); 
 
-const ownerSchema = mongoose.Schema({
+
+const Owner = sequelize.define('Owner', {
     fullname: {
-        type: String,
-        minLength: 3,
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+            len: [3, 255], // Minimum 3 characters
+        },
         trim: true,
     },
-    email: String,
-    password: String,
-    products: {
-        type: Array,
-        default: [],
+    email: {
+        type: DataTypes.STRING,
+        allowNull: false,
+        validate: {
+            isEmail: true, // Ensures valid email format
+        },
     },
-    picture: String,
-    gstin: String,
+    password: {
+        type: DataTypes.STRING,
+        allowNull: false,
+    },
+    products: {
+        type: DataTypes.JSON, // Stores array data as JSON
+        defaultValue: [],
+    },
+    picture: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+    gstin: {
+        type: DataTypes.STRING,
+        allowNull: true,
+    },
+}, {
+    tableName: 'owners', // Specify table name
+    timestamps: false, // Adds createdAt and updatedAt fields
 });
 
-module.exports = mongoose.model("owner", ownerSchema);
+module.exports = Owner;
